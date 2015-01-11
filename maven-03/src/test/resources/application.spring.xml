@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:beans xmlns:aop="http://www.springframework.org/schema/aop" xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/beans" xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd "
+     default-autowire="byType"
+     >
+ 	<context:component-scan base-package="rxb"></context:component-scan> 
+ 	<p:bean id="datasource" class="com.mchange.v2.c3p0.ComboPooledDataSource" autowire="no" >
+     	<p:property name="driverClass" value="oracle.jdbc.OracleDriver" />
+		<p:property name="jdbcUrl" value="jdbc:oracle:thin:@127.0.0.1:1521/XE" />
+		<p:property name="user" value="maven_test" />
+		<p:property name="password" value="111111" />
+     </p:bean>
+     
+     <p:bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" autowire="no" >
+     	<p:property name="dataSource" ref="datasource" />
+     	<p:property name="hibernateProperties" >
+     		<p:value>
+     			hibernate.dialect=org.hibernate.dialect.Oracle10gDialect
+     			hibernate.hbm2ddl.auto=update
+     			hibernate.show_sql=false
+     			hibernate.format_sql=true
+     			 
+     			hibernate.current_session_context_class=thread
+     			
+     		</p:value>
+     	</p:property>
+ 		<p:property name="packagesToScan">
+ 			<p:list>
+ 				<p:value>rxb.maven.model</p:value>
+ 			</p:list>
+ 		</p:property>
+ 	</p:bean> 
+ 	<p:bean id="transactionManager" class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+ 		<p:property name="sessionFactory" ref="sessionFactory"></p:property>
+ 	</p:bean>
+ 	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+ 		<tx:attributes>
+ 			<tx:method name="create*"/>
+ 			<tx:method name="update*"/>
+ 			<tx:method name="delete*"/>
+ 			<tx:method name="register*"/>
+ 			<tx:method name="reset*"></tx:method>
+ 			<tx:method name="status*"></tx:method>
+ 			<tx:method name="*" read-only="true"/>
+ 		</tx:attributes>
+ 	</tx:advice>
+ 	<aop:config>
+ 		<aop:advisor advice-ref="txAdvice" pointcut="execution(* rxb.maven.service.*.*(..))"/>
+ 	</aop:config>
+ </p:beans>
