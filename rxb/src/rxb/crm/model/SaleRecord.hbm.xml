@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="rxb.crm.model">
+	<class name="SaleRecord" table="t_salerecords">
+		<id name="id" >
+			<generator class="native" >
+				<param name="sequence">sale_seq</param>
+			</generator>
+		</id>
+		<many-to-one name="customer" column="customer_id" class="Customer"/>
+		<property name="price" type="java.math.BigDecimal" precision="10" scale="2" column="price"/>
+		<property name="productCount" length="5"></property>
+		<many-to-one name="product" column="product_id" class="Product"/>
+		<property name="purchaseDate" type="date"></property>
+		<property name="saleInvoiceNo" length="20"></property>
+		<property name="stockoutInvNo" length="20"></property>
+	</class>
+</hibernate-mapping>

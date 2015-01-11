@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="rxb.crm.model">
+	<class name="User" table="t_users">
+		<id name="id">
+			<generator class="native">
+				<param name="sequence">user_seq</param>
+			</generator>
+		</id>
+		<many-to-one lazy="false" name="department" column="department_id" class="Department" />
+		<property name="email" length="32"/>
+		<property name="password" length="256" />
+		<property name="realname" length="12"/>
+		<property name="status"/>
+		<property name="telephone" length="18"/>
+		<property name="username" length="18"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="rxb.crm.model">
+	<class name="UserPrivilege" table="t_userprivileges">
+		<id name="id" >
+			<generator class="native">
+				<param name="sequence">userpriv_seq</param>
+			</generator>
+		</id>
+		<property name="mask" type="char"/>
+		<many-to-one name="moduleURL" column="moduleurl_id"  class="ModuleURL" lazy="false"/>
+		<many-to-one name="user" column="user_id" class="User" lazy="false"/>
+	</class>
+</hibernate-mapping>
+
+
+

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+	
+	<package name="crud-default" extends="convention-default">
+		<result-types>
+			<result-type name="template" class="rxb.system.TemplateDispatcherResult" default="true" >
+				<param name="templateLocation">/WEB-INF/page/template.jsp</param>
+				<param name="topLocation">/WEB-INF/page/include/top-menu.jsp</param>
+				<param name="leftLocation">/WEB-INF/page/include/left-block.jsp</param>
+				<param name="footerLocation">/WEB-INF/page/include/footer-copyright.jsp</param>
+			</result-type>
+		</result-types>
+		<interceptors>
+			<interceptor name="logincheck" class="rxb.crm.web.interceptor.LoginCheckInterceptor"></interceptor>
+			
+			<interceptor-stack name="mystack">
+				<interceptor-ref name="exception"/>
+				<!-- <interceptor-ref name="logincheck"/> -->
+				<interceptor-ref name="fileUploadStack"/>
+                <interceptor-ref name="defaultStack"/>
+                
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="mystack"/>
+		
+		<global-results>
+			<result name="login" type="redirectAction">
+				<param name="actionName">uloginform</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="denied">
+				/WEB-INF/page/error/access-denied.jsp
+			</result>
+		</global-results>
+		
+		<global-exception-mappings>
+			<exception-mapping result="denied" exception="rxb.crm.exception.AccessDeniedException"></exception-mapping>		
+		</global-exception-mappings>
+	</package>
+	
+	<constant name="struts.convention.default.parent.package" value="crm" />
+	<constant name="struts.convention.package.locators" value="web,customer" />
+	<constant name="struts.convention.package.locators.basePackage" value="rxb.crm.web.*" />
+	<constant name="struts.convention.result.path" value="/WEB-INF/page" />
+	<constant name=" struts.convention.relative.result.types" value="template,dispatcher,velocity,freemarker" />	
+	
+	<constant name="struts.i18n.encoding" value="UTF-8"></constant>
+	<constant name="struts.locale" value="zh_CN"></constant>
+	<constant name="struts.multipart.maxSize" value="20000000000"/><!--20G-->
+	<package name="crm" extends="crud-default">
+		<!-- <action name="demo">
+			<result>
+				<param name="location">/WEB-INF/page/bootstrap/demo.jsp</param>
+				<param name="leftLocation">/WEB-INF/page/bootstrap/demo-link.jsp</param>
+			</result>
+		</action> -->
+	</package>
+</struts>
+<!-- 	
+	<constant name="struts.ognl.allowStaticMethodAccess" value="true" />
+	<package name="crm" namespace="/" extends="struts-default">
+		<result-types>
+			<result-type name="template" class="rxb.system.TemplateDispatcherResult" default="true" >
+				<param name="templateLocation">/WEB-INF/page/template.jsp</param>
+				<param name="topLocation">/WEB-INF/page/include/top-menu.jsp</param>
+				<param name="leftLocation">/WEB-INF/page/include/left-block.jsp</param>
+				<param name="footerLocation">/WEB-INF/page/include/footer-copyright.jsp</param>
+			</result-type>
+		</result-types>
+		<interceptors>
+			
+			<interceptor name="logincheck" class="rxb.crm.web.interceptor.LoginCheckInterceptor"></interceptor>
+			
+			<interceptor-stack name="mystack">
+				<interceptor-ref name="exception"/>
+				<interceptor-ref name="logincheck"/>
+				<interceptor-ref name="fileUploadStack"/>
+                <interceptor-ref name="defaultStack"/>
+                
+			</interceptor-stack>
+		</interceptors>
+		
+		<default-interceptor-ref name="mystack"/>
+		
+		
+		
+		<global-results>
+			<result name="login" type="redirectAction">
+				<param name="actionName">uloginform</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="denied">
+				/WEB-INF/page/error/access-denied.jsp
+			</result>
+		</global-results>
+		
+		<global-exception-mappings>
+			<exception-mapping result="denied" exception="rxb.crm.exception.AccessDeniedException"></exception-mapping>		
+		</global-exception-mappings>
+		
+		<action name="demo">
+			<result>
+				<param name="location">/WEB-INF/page/bootstrap/demo.jsp</param>
+				<param name="leftLocation">/WEB-INF/page/bootstrap/demo-link.jsp</param>
+			</result>
+		</action>
+		<action name="dform" class="rxb.crm.web.department.LoadAction">
+			<result type="template">
+				/WEB-INF/page/department/dept-edit.jsp
+			</result>			
+		</action>
+		<action name="dedit" class="rxb.crm.web.department.DepartmentAction" >
+			<result type="redirectAction">
+				<param name="actionName">dlist</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="input">
+				/WEB-INF/page/department/dept-edit.jsp
+			</result>			
+		</action>
+		<action name="dlist" class="rxb.crm.web.department.ListDepartmentAction" >
+			<result>
+				/WEB-INF/page/department/dept-list.jsp
+			</result>		
+		</action>
+		<action name="ddelete" class="rxb.crm.web.department.RemoveDepartmentAction" >
+			<result type="redirectAction">
+				<param name="actionName">dlist</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+		<action name="uform" class="rxb.crm.web.user.LoadAction">
+			<result>
+				/WEB-INF/page/user/user-edit.jsp
+			</result>		 
+		</action>
+		
+		<action name="uedit" class="rxb.crm.web.user.UserAction">
+			<result type="redirectAction">
+				<param name="actionName">ulist</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="input">
+				/WEB-INF/page/user/user-edit.jsp
+			</result>			
+		</action>
+		<action name="uloginform">
+			<result>
+				/WEB-INF/page/user/userlogin.jsp
+			</result>
+		</action>
+		<action name="ulogin" class="rxb.crm.web.user.UserLoginAction">
+			<result name="success" type="redirectAction">
+				<param name="actionName">uform</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="input">
+				/WEB-INF/page/user/userlogin.jsp
+			</result>			 
+		</action>
+		<action name="ulist" class="rxb.crm.web.user.ListUserAction">
+			<result>
+				/WEB-INF/page/user/user-list.jsp
+			</result>			
+		</action>
+		<action name="udelete" class="rxb.crm.web.user.BatchUserAction" method="remove">
+			<result type="redirectAction">
+				<param name="actionName">ulist</param>
+				<param name="namespace">/</param>
+			</result>			 
+		</action>
+		<action name="ureset" class="rxb.crm.web.user.BatchUserAction" method="reset">
+			<result type="redirectAction">
+				<param name="actionName">ulist</param>
+				<param name="namespace">/</param>
+			</result>			
+		</action>
+		<action name="ustatus" class="rxb.crm.web.user.BatchUserAction" method="status">
+			<result type="redirectAction">
+				<param name="actionName">ulist</param>
+				<param name="namespace">/</param>
+			</result>			 
+		</action>
+		<action name="ulogout" class="rxb.crm.web.user.UserLogoutAction"  >
+			<result type="redirectAction">
+				<param name="actionName">uloginform</param>
+				<param name="namespace">/</param>
+			</result>			 
+		</action>
+		<action name="mform" class="rxb.crm.web.moduleurl.LoadAction">
+			<result>
+				/WEB-INF/page/moduleurl/moduleurl-edit.jsp
+			</result>		
+		</action>
+		<action name="medit" class="rxb.crm.web.moduleurl.CreateModuleURLAction">
+			<result type="redirectAction">
+				<param name="actionName">mlist</param>
+				<param name="namespace">/</param>
+				<param name="id">%{id}</param>
+			</result>
+			<result name="input">
+				/WEB-INF/page/moduleurl/moduleurl-edit.jsp
+			</result>		
+		</action>
+		<action name="mlist" class="rxb.crm.web.moduleurl.ListModuleURLAction">
+			<result>
+				/WEB-INF/page/moduleurl/moduleurl-list.jsp
+			</result>			
+		</action>
+		<action name="mdelete" class="rxb.crm.web.moduleurl.RemoveModuleURLAction">
+			<result type="redirectAction">
+				<param name="actionName">mlist</param>
+				<param name="namespace">/</param>
+			</result>		
+		</action>
+		<action name="moduleform" class="rxb.crm.web.module.LoadAction">
+			<result>
+				/WEB-INF/page/module/module-edit.jsp
+			</result>		
+		</action>
+		<action name="moduleedit" class="rxb.crm.web.module.CreateModuleAction">
+			<result type="redirectAction">
+				<param name="actionName">modulelist</param>
+				<param name="namespace">/</param>
+				<param name="id">${id}</param>
+			</result>
+			<result name="input">
+				/WEB-INF/page/module/module-edit.jsp
+			</result>
+		</action>
+		<action name="modulelist" class="rxb.crm.web.module.ListModuleAction">
+			<result>
+				/WEB-INF/page/module/module-list.jsp
+			</result>			 
+		</action>
+		
+		<action name="auth" class="rxb.crm.web.userprivilege.LoadAction">
+			<result>
+				/WEB-INF/page/userprivilege/user-auth.jsp
+			</result>			 
+		</action>
+		
+		<action name="upedit" class="rxb.crm.web.userprivilege.GrantPrivilegeAction">
+			<result type="redirectAction">
+				<param name="actionName">auth</param>
+				<param name="namespace">/</param>
+				<param name="id">${userId}</param>
+			</result>			 
+		</action>
+		<action name="revoke" class="rxb.crm.web.userprivilege.RevokePrivilegeAction">
+			<result type="redirectAction">
+				<param name="actionName">auth</param>
+				<param name="namespace">/</param>
+				<param name="id">${userId}</param>
+			</result>			
+		</action>
+		<action name="uplist" class="rxb.crm.web.userprivilege.ListUserPrivilegeAction">
+			<result >
+				/WEB-INF/page/userprivilege/userprivilege-list.jsp
+			</result>			
+		</action>
+		<action name="mauth" class="rxb.crm.web.userprivilege.LoadURLAction">
+			<result>
+				/WEB-INF/page/userprivilege/priv-auth.jsp
+			</result>			
+		</action>
+		<action name="urlauth" class="rxb.crm.web.userprivilege.GrantUserAction">
+			<result type="redirectAction">
+				<param name="actionName">mauth</param>
+				<param name="namespace">/</param>
+				<param name="id">${urlId}</param>
+			</result>			 
+		</action>
+		<action name="urlrevoke" class="rxb.crm.web.userprivilege.RevokeUserAction">
+			<result type="redirectAction">
+				<param name="actionName">mauth</param>
+				<param name="namespace">/</param>
+				<param name="id">${urlId}</param>
+			</result>
+		</action>
+		
+		<action name="cform" class="rxb.crm.web.customer.LoadAction">
+			<result>
+				/WEB-INF/page/customer/cust-edit.jsp
+			</result>
+		</action>
+		<action name="cedit" class="rxb.crm.web.customer.CustomerEditAction">
+			<result type="redirectAction">
+				<param name="actionName">clist</param>
+				<param name="namespace">/</param>
+			</result>
+			<result name="input">
+				/WEB-INF/page/customer/cust-edit.jsp
+			</result>
+		</action>
+		<action name="clist" class="rxb.crm.web.customer.ListCustomerAction">
+			<result>
+				/WEB-INF/page/customer/cust-list.jsp
+			</result>
+		</action>
+		<action name="cdelete" class="rxb.crm.web.customer.RemoveCustomerAction">
+			<result type="redirectAction">
+				<param name="actionName">clist</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+		
+		<action name="cdetail" class="rxb.crm.web.customer.CustomerDetailAction">
+			<result type="dispatcher">
+				/WEB-INF/page/customer/cust-detail.jsp
+			</result>
+			<result name="input">
+				/WEB-INF/page/customer/cust-detail.jsp
+			</result>
+		</action>
+		<action name="import" class="rxb.crm.web.customer.ImportCustomerAction">
+			<result>
+				/WEB-INF/page/customer/import-preview.jsp
+			</result>
+			<result name="input">
+				/WEB-INF/page/customer/cust-list.jsp
+			</result>
+		</action>
+		<action name="importCustomer" class="rxb.crm.web.customer.CustomerEditAction" method="importCustomer">
+			<result type="redirectAction">
+				<param name="actionName">clist</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>
+		<action name="cancel" class="rxb.crm.web.customer.CancelAction">
+			<result type="redirectAction">
+				<param name="actionName">clist</param>
+				<param name="namespace">/</param>
+			</result>
+		</action>		 
+		<action name="download" class="rxb.crm.web.customer.ExportCustomerAction">
+			<result type="stream" name="success">
+				<param name="contentType">text/plain</param>
+				<param name="contentDisposition">attachment;filename="cust.txt"</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>
+		<action name="download1" class="rxb.crm.web.customer.ExportCustomerAction" method="jexcel">
+			<result type="stream" name="success">
+				<param name="contentType">text/plain</param>
+				<param name="contentDisposition">attachment;filename="cust.xls"</param>
+				<param name="inputName">inputStream</param>
+			</result>
+		</action>	
+	</package>
+</struts> -->

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="rxb.crm.model">
+	<class name="Module" table="t_modules">
+		<id name="id">
+			<generator class="native">
+				<param name="sequence">module_seq</param>
+			</generator>
+		</id>
+		<property name="name" length="12"/>
+		<property name="title" length="20"/>
+		<property name="mainMenu" type="boolean"/>
+		<many-to-one name="url" class="ModuleURL" column="url_id" lazy="false"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="rxb.crm.model">
+	<class name="Customer" table="t_customers">
+		<id name="id">
+			<generator class="native">
+				<param name="sequence">cus_seq</param>
+			</generator>
+		</id>
+		<property name="address" length="64"/>
+		<property name="contactMan" column="contact_man" length="12"/>
+		<property name="name" length="20"/>
+		<property name="telephone" length="18"/>
+		<property name="type" length="10"/>
+	</class>
+</hibernate-mapping>
+
